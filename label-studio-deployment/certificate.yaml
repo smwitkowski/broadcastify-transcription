@@ -1,0 +1,7 @@
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: label-studio-certificate
+spec:
+  domains:
+    - labeling.stephen-witkowski.com

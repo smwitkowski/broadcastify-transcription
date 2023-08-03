@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: label-studio-ingress
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: "label-studio-ip"
+    kubernetes.io/ingress.class: "gce"
+  labels:
+    app: label-studio
+spec:
+  defaultBackend:
+    service:
+      name: label-studio-service
+      port:
+        number: 80
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: label-studio-service
+            port:
+              number: 80
