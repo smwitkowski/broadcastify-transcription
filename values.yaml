@@ -1,0 +1,24 @@
+global:
+  persistence:
+    enabled: true
+    type: gcs
+    config:
+      gcs:
+        projectID: "personal-project-space-353201"
+        bucket: "purple-label-studio-data"
+        folder: ""
+app:
+  service:
+    type: LoadBalancer
+  ingress:
+    enabled: true
+    className: gce
+    annotations:
+      kubernetes.io/ingress.global-static-ip-name: label-studio-ip
+  serviceAccount:
+    annotations:
+      iam.gke.io/gcp-service-account: "label-studio-service-account@personal-project-space-353201.iam.gserviceaccount.com"
+rqworker:
+  serviceAccount:
+    annotations:
+      iam.gke.io/gcp-service-account: "label-studio-service-account@personal-project-space-353201.iam.gserviceaccount.com"
