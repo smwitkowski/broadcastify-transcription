@@ -14,7 +14,8 @@ spec:
       port:
         number: 80
   rules:
-  - http:
+  - host: labeling.stephen-witkowski.com
+    http:
       paths:
       - path: /
         pathType: Prefix
