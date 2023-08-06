@@ -37,7 +37,7 @@ def main(project_id, bucket_name, prefix, output_directory):
 
     for dir_path in [uems_directory, rttms_directory, lists_directory, audio_directory]:
         if not os.path.exists(dir_path):
-            os.mkdir(dir_path)
+            os.mkdirs(dir_path, exist_ok=True)
 
     # Initialize the GCS client
     client = storage.Client(project=project_id)
