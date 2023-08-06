@@ -3,9 +3,9 @@ import json
 import os
 import click
 
-def convert_to_rttm_and_uem(data, filename):
+def convert_to_rttm_and_uem(data, filename, file_length):
     rttm_output = ""
-    uem_output = f"{filename} NA 0 61\n" # Assuming the audio length is 61s for each file
+    uem_output = f"{filename} NA 0 {file_length} \n" # Assuming the audio length is 61s for each file
     for result in data["result"]:
         start_time = result["value"]["start"]
         duration = result["value"]["end"] - start_time
@@ -17,7 +17,7 @@ def convert_to_rttm_and_uem(data, filename):
 
 
 def download_audio_file(bucket, audio_path):
-    audio_directory = 'audio'
+    audio_directory = 'data/audio'
     blob = bucket.blob(audio_path.replace('gs://', '').split('/', 1)[1])
     local_path = os.path.join(audio_directory, os.path.basename(audio_path))
     blob.download_to_filename(local_path)
@@ -59,7 +59,8 @@ def main(project_id, bucket_name, prefix, output_directory):
             blob_content = blob.download_as_text()
             data = json.loads(blob_content)
             filename = os.path.basename(data['task']['data']['audio'])
-            rttm_output, uem_output = convert_to_rttm_and_uem(data, filename)
+            file_length = data['result'][0]['original_length']
+            rttm_output, uem_output = convert_to_rttm_and_uem(data, filename, file_length)
             with open(os.path.join(rttms_directory, f"{filename}.rttm"), 'w') as file:
                 file.write(rttm_output)
 
@@ -68,6 +69,7 @@ def main(project_id, bucket_name, prefix, output_directory):
             # Download the original audio file
             downloaded_filename = download_audio_file(bucket, data['task']['data']['audio'])
             file_names.append(downloaded_filename)
+            blob_contents.append(blob_content)
 
     # Shuffle and split the contents
     train_size = int(0.8 * len(blob_contents))
