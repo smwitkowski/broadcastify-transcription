@@ -1,0 +1,21 @@
+Databases:
+  MyDatabase: 
+    - audio/{uri}
+
+Protocols:
+  MyDatabase:
+    SpeakerDiarization:
+      MyProtocol:
+        scope: file
+        train:
+          uri: lists/train.lst
+          annotation: rttms/{uri}.rttm
+          annotated: uems/{uri}.uem
+        development:
+          uri: lists/development.lst
+          annotation: rttms/{uri}.rttm
+          annotated: uems/{uri}.uem
+        test:
+          uri: lists/test.lst
+          annotation: rttms/{uri}.rttm
+          annotated: uems/{uri}.uem
